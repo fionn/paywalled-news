@@ -1,0 +1,20 @@
+name = "cf_reverse_proxy"
+type = "javascript"
+usage_model = "bundled"
+compatibility_flags = []
+compatibility_date = "2022-04-09"
+
+[env.staging]
+workers_dev = true
+
+[env.staging.vars]
+DESTINATION_HOST = "example.com"
+
+[env.production]
+workers_dev = false
+routes = ["custom.domain/*"]
+zone_id = "your zone id"
+
+[env.production.vars]
+DESTINATION_HOST = "example.com"
+REFERER = "referring.domain"
