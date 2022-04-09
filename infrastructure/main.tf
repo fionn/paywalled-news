@@ -5,3 +5,24 @@ data "cloudflare_zones" "apex" {
     status     = "active"
   }
 }
+
+resource "cloudflare_record" "spf" {
+  zone_id = data.cloudflare_zones.apex.zones[0].id
+  name    = "@"
+  type    = "TXT"
+  value   = "v=spf1 -all"
+}
+
+resource "cloudflare_record" "dkim" {
+  zone_id = data.cloudflare_zones.apex.zones[0].id
+  name    = "*._domainkey"
+  type    = "TXT"
+  value   = "v=DKIM1; p="
+}
+
+resource "cloudflare_record" "dmarc" {
+  zone_id = data.cloudflare_zones.apex.zones[0].id
+  name    = "_dmarc"
+  type    = "TXT"
+  value   = "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s;"
+}
