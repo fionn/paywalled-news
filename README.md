@@ -12,6 +12,7 @@ If you use a token, you need the following scopes:
     * Workers Scripts:Edit,
     * Account Settings:Read,
     * _apex zone_:
+        * Zone Settings:Edit,
         * Workers Routes:Edit,
         * Page Rules:Edit,
         * DNS:Edit,

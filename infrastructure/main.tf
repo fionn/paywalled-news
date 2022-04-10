@@ -6,6 +6,29 @@ data "cloudflare_zones" "apex" {
   }
 }
 
+resource "cloudflare_zone_settings_override" "apex" {
+  zone_id = data.cloudflare_zones.apex.zones[0].id
+  settings {
+    always_use_https         = "on"
+    automatic_https_rewrites = "on"
+    brotli                   = "on"
+    http3                    = "on"
+    ipv6                     = "on"
+    opportunistic_encryption = "on"
+    opportunistic_onion      = "on"
+    zero_rtt                 = "on"
+    tls_1_3                  = "zrt"
+    min_tls_version          = "1.3"
+    ssl                      = "strict"
+
+    security_header {
+      enabled            = true
+      include_subdomains = true
+      nosniff            = true
+    }
+  }
+}
+
 resource "cloudflare_record" "apex_a" {
   zone_id = data.cloudflare_zones.apex.zones[0].id
   name    = "@"
@@ -28,16 +51,6 @@ resource "cloudflare_record" "www" {
   type    = "CNAME"
   value   = cloudflare_record.apex_a.hostname
   proxied = true
-}
-
-resource "cloudflare_page_rule" "always_use_https" {
-  zone_id  = data.cloudflare_zones.apex.zones[0].id
-  target   = "http://*${cloudflare_record.apex_a.hostname}/*"
-  priority = 3
-
-  actions {
-    always_use_https = true
-  }
 }
 
 resource "cloudflare_page_rule" "www_redirect" {
