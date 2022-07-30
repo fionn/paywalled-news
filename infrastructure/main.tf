@@ -30,6 +30,12 @@ resource "cloudflare_zone_settings_override" "apex" {
   }
 }
 
+resource "cloudflare_zone_dnssec" "apex" {
+  # May require two passes.
+  # https://github.com/cloudflare/terraform-provider-cloudflare/issues/1486
+  zone_id = data.cloudflare_zones.apex.zones[0].id
+}
+
 resource "cloudflare_record" "apex_a" {
   zone_id = data.cloudflare_zones.apex.zones[0].id
   name    = "@"
