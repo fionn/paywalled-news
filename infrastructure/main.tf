@@ -7,6 +7,7 @@ data "cloudflare_zones" "apex" {
 }
 
 resource "cloudflare_zone_settings_override" "apex" {
+  # https://github.com/cloudflare/terraform-provider-cloudflare/issues/1498#issuecomment-1063326790
   zone_id = data.cloudflare_zones.apex.zones[0].id
   settings {
     always_use_https         = "on"
